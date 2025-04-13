@@ -42,6 +42,7 @@ def movie_image_path(instance: "Movie", filename: str) -> pathlib.Path:
     filename = f"{slugify(instance.title)}--{uuid.uuid4()}" + pathlib.Path(filename).suffix
     return pathlib.Path("upload/movie") / pathlib.Path(filename)
 
+
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -61,6 +62,10 @@ class MovieSession(models.Model):
     show_time = models.DateTimeField()
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     cinema_hall = models.ForeignKey(CinemaHall, on_delete=models.CASCADE)
+    movie_image = models.ImageField(
+        null=True,
+        upload_to=movie_image_path
+    )
 
     class Meta:
         ordering = ["-show_time"]
